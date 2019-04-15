@@ -16,24 +16,17 @@ import javax.net.ssl.SSLException;
 import java.security.cert.CertificateException;
 
 
-public class NettyServer {
+public class NettyServer extends AbstractNettyServer implements Server {
     private String ipAddress;
     private int port;
     private boolean ssl;
 
 
-    public NettyServer(String ipAddress, int port) {
-        this(ipAddress, port, false);
+    public NettyServer(String host, int port) {
+        super(host, port);
     }
 
-    public NettyServer(String ipAddress, int port, boolean ssl) {
-        super();
-        this.ipAddress = ipAddress;
-        this.port = port;
-        this.ssl = ssl;
-    }
-
-    public void start() throws Exception {
+    public void start() {
         // Configure the server.
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -51,6 +44,9 @@ public class NettyServer {
             System.out.printf("Server started on http://%s:%d\n", this.ipAddress, this.port);
 
             ch.closeFuture().sync();
+        } catch (Exception e) {
+          e.printStackTrace();
+          System.exit(1);
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
