@@ -15,7 +15,7 @@ public class Executor {
     private static final int PORT = 8090;
 
     public static void main( String[] args ) throws Exception {
-        startNettyServer();
+        startJerseyWithNetty();
     }
 
     private static void startNettyServer() throws Exception {
@@ -23,8 +23,8 @@ public class Executor {
         server.start();
     }
 
-    private void startJerseyWithNetty() {
-        URI baseUri = UriBuilder.fromUri("http://localhost/").port(9998).build();
+    private static void startJerseyWithNetty() {
+        URI baseUri = UriBuilder.fromUri("http://localhost/").port(9080).build();
         ResourceConfig resourceConfig = new ResourceConfig(HelloImpl.class);
 
         Channel server = NettyHttpContainerProvider.createServer(baseUri, resourceConfig, false);
